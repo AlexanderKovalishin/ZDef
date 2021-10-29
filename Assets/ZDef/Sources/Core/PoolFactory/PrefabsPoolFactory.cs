@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ZDef.Core.PoolFactory
 {
-    public class PrefabsFactory<TArgs, TResult> : MonoBehaviour 
+    public class PrefabsPoolFactory<TArgs, TResult> : MonoBehaviour 
         where TResult: MonoBehaviour, IReturnToPoolCallback<TResult>, IFactoryInit<TArgs>
     {
         [SerializeField] private TResult _prefab;
@@ -25,9 +25,12 @@ namespace ZDef.Core.PoolFactory
         
         private TResult CreateInstance()
         {
+            bool active = _prefab.gameObject.activeSelf; 
             _prefab.gameObject.SetActive(false);
             // todo: pre awake injections here
-            return Instantiate(_prefab, _root);
+            TResult instance = Instantiate(_prefab, _root);
+            _prefab.gameObject.SetActive(active);
+            return instance;
         }
 
         private TResult DequeueOrCreateInstance()
