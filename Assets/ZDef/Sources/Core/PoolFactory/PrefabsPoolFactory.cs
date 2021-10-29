@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace ZDef
+namespace ZDef.Core.PoolFactory
 {
     public class PrefabsFactory<TArgs, TResult> : MonoBehaviour 
         where TResult: MonoBehaviour, IReturnToPoolCallback<TResult>, IFactoryInit<TArgs>
@@ -16,17 +16,18 @@ namespace ZDef
         public TResult Instantiate(TArgs args)
         {
             TResult instance = DequeueOrCreateInstance();
+            instance.transform.LocalIdentity();
             instance.gameObject.SetActive(true);
             instance.Init(args);
             instance.ReturnToPool += InstanceOnReturnToPool;
             return instance;
         }
-
+        
         private TResult CreateInstance()
         {
             _prefab.gameObject.SetActive(false);
             // todo: pre awake injections here
-            return Instantiate(_prefab, Vector3.zero, quaternion.identity, _root);
+            return Instantiate(_prefab, _root);
         }
 
         private TResult DequeueOrCreateInstance()
