@@ -50,6 +50,7 @@ namespace ZDef.Core.PoolFactory
         
         private void InstanceOnReturnToPool(TResult sender)
         {
+            sender.ReturnToPool -= InstanceOnReturnToPool;
             sender.gameObject.SetActive(false);
             _instances.Enqueue(sender);
         }
