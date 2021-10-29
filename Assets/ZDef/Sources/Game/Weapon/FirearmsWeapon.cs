@@ -15,6 +15,7 @@ namespace ZDef.Game.Weapon
         private void Awake()
         {
             _factory = GetComponent<ProjectileControllerFactory>();
+            enabled = false;
         }
 
         public void СaptureTarget(Transform startPosition, Transform target)
