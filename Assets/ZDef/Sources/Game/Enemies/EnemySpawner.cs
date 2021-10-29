@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using ZDef.Game.Data;
 
 namespace ZDef.Game.Enemies
@@ -7,6 +6,7 @@ namespace ZDef.Game.Enemies
     [RequireComponent(typeof(EnemyControllerFactory))]
     public class EnemySpawner: MonoBehaviour
     {
+        [SerializeField] private float _offset = 1.0f;
         [SerializeField] private EnemyConfig _enemyConfig;
         [SerializeField] private EnemySpawnPoints _points;
 
@@ -20,8 +20,12 @@ namespace ZDef.Game.Enemies
 
         public void SpawnEnemy(float deadLine)
         {
+            Transform spawnPoint = _points.DequeuePoint();
+            Vector3 spawnPosition = spawnPoint.position;
+            spawnPosition.x += Random.Range(-_offset, _offset);
+            
             var initArgs = new EnemyControllerInitArgs(
-                _points.DequeuePoint(),
+                spawnPosition,
                 _enemyConfig.Health,
                 _enemyConfig.GetRandomVelocity(),
                 deadLine);

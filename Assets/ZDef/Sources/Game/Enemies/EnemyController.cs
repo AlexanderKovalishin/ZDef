@@ -19,7 +19,7 @@ namespace ZDef.Game.Enemies
 
         public void Init(EnemyControllerInitArgs args)
         {
-            _transform.position = args.StartPosition.position;
+            _transform.position = args.StartPosition;
             _health = args.Health;
             _velocity = args.Velocity;
             _deadLine = args.DeadLine;
