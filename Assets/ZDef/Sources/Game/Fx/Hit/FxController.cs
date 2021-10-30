@@ -3,12 +3,12 @@ using ZDef.Core;
 using ZDef.Core.EventBus;
 using ZDef.Game.BusEvents;
 
-namespace ZDef.Game.Fx.Decals
+namespace ZDef.Game.Fx
 {
-    public class DecalsController<TEvent> : MonoBehaviour
-        where TEvent: IDecalEvent
+    public class FxController<TEvent>: MonoBehaviour
+        where TEvent: IHitEvent 
     {
-        [SerializeField] private DecalsFactory[] _decalsFactories;
+        [SerializeField] private HitFxFactory _hitFxFactory;
         private EventBus _eventBus;
         private void Awake()
         {
@@ -23,8 +23,7 @@ namespace ZDef.Game.Fx.Decals
 
         private void HitFxEventListener(TEvent args)
         {
-            DecalsFactory factory = _decalsFactories[Random.Range(0, _decalsFactories.Length - 1)];
-            factory.Instantiate(new DecalsInitArgs(args.Position));
-        }    
+            _hitFxFactory.Instantiate(new HitFxInitArgs(args.Position, args.Source));
+        }
     }
 }

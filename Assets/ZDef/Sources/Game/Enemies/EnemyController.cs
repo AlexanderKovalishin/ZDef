@@ -55,7 +55,8 @@ namespace ZDef.Game.Enemies
 
             if (_transform.position.y < _deadLine)
             {
-                _eventBus.Send(new PlayerHitEvent(_damage));
+                Vector3 hitPosition = _transform.position;
+                _eventBus.Send(new PlayerHitEvent(_damage, hitPosition, hitPosition));
                 InvokeReturnToPool();
             }
         }

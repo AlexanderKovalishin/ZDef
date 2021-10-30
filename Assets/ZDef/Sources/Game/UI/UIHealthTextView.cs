@@ -8,7 +8,7 @@ namespace ZDef.Game.UI
         [SerializeField] private TextMeshProUGUI _healthText;
         [SerializeField] private string _format;
 
-        public override void SetValue(int health)
+        public override void SetValue(int health, int max)
         {
             _healthText.text = string.Format(_format, health);
         }

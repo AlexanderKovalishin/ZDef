@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8480453315486150644}
   - component: {fileID: 8480453315486150645}
   m_Layer: 0
-  m_Name: Decal4
+  m_Name: EnemyDecal4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

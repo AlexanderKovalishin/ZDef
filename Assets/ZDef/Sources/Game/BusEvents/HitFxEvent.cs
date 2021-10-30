@@ -2,7 +2,7 @@
 
 namespace ZDef.Game.BusEvents
 {
-    public readonly struct HitFxEvent
+    public readonly struct HitFxEvent: IDecalEvent, IHitEvent
     {
         public Vector3 Position { get; }
         public Vector3 Source { get; }

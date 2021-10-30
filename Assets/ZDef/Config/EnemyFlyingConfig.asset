@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyFlyingConfig
   m_EditorClassIdentifier: 
   _probabilityWeight: 10
-  _health: 25
+  _health: 50
+  _damage: 1
   _minVelocity: 2
   _maxVelocity: 2
-  _skin: 

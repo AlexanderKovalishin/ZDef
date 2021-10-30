@@ -4,6 +4,6 @@ namespace ZDef.Game.UI
 {
     public abstract class UIHealthView : MonoBehaviour
     {
-        public abstract void SetValue(int health);
+        public abstract void SetValue(int health, int max);
     }
 }

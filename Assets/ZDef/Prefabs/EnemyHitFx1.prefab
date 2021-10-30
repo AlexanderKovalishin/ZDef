@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5554196476382911269}
   - component: {fileID: 4825012115207954132}
   m_Layer: 0
-  m_Name: HitFx
+  m_Name: EnemyHitFx1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

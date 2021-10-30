@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6156647565700430331}
   - component: {fileID: 6156647565700430328}
   m_Layer: 0
-  m_Name: Decal1
+  m_Name: PlayerDecal2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,8 +86,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 107896450278153348, guid: 0bc2ca3e70d16064aab475ef194132b5, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.5019608}
+  m_Sprite: {fileID: 6808477374861573366, guid: 15b6357f26ee271458084e3603b7824c, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

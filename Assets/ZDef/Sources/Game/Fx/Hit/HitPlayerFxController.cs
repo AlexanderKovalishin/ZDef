@@ -5,7 +5,7 @@ using ZDef.Game.BusEvents;
 
 namespace ZDef.Game.Fx
 {
-    public class HitFxController: FxController<HitFxEvent>
+    public class HitPlayerFxController: FxController<PlayerHitEvent>
     {
     }
 }

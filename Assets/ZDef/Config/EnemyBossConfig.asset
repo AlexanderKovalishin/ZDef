@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: EnemyBossConfig
   m_EditorClassIdentifier: 
   _probabilityWeight: 2
-  _health: 150
+  _health: 600
   _damage: 10
   _minVelocity: 1
   _maxVelocity: 1
-  _skin: 
