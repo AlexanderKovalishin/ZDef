@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minEnemies: 200
   _maxEnemies: 250
-  _minSpawnTimeout: 0.1
-  _maxSpawnTimeout: 0.2
+  _minSpawnTimeout: 0.15
+  _maxSpawnTimeout: 0.25

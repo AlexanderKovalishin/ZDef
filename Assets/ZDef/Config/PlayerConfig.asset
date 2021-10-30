@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6effa959fc4394841a560a3412856a, type: 3}
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
+  _dieSloMo: 0.3
+  _dieDelay: 3
   _velocity: 10
   _health: 100

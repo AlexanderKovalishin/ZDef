@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using ZDef.Core;
@@ -18,6 +19,7 @@ namespace ZDef.Game.Player
         [SerializeField] private PlayerWeaponController[] _weapons;
 
         private int _health; 
+        private bool _finallyDead; 
 
         private readonly HashSet<EnemyController> _enemies = new HashSet<EnemyController>();
         private EventBus _eventBus;
@@ -36,19 +38,39 @@ namespace ZDef.Game.Player
 
         private void PlayerHitEventListener(PlayerHitEvent args)
         {
+            if (_health <= 0)
+            {
+                if (_finallyDead)
+                {
+                    _animator.SetDead();
+                }
+                return;
+            }
+            
             _health -= args.Damage;
             if (_health <= 0)
             {
-                _eventBus.Send(new DefeatEvent());
                 _health = 0;
-                enabled = false;
-                _animator.SetDead();
-                foreach (PlayerWeaponController weapon in _weapons)
-                {
-                    weapon.CaptureTarget(null);
-                }
+                Time.timeScale = _playerConfig.DieSloMo;
+                StartCoroutine(DieDelayed(_playerConfig.DieDelay));
             }
             _eventBus.Send(new PlayerUpdateHealthEvent(_health));
+        }
+
+        private IEnumerator DieDelayed(float delay)
+        {
+            _eventBus.Send(new PlayerDieEvent());
+            yield return new WaitForSeconds(delay); 
+            Time.timeScale = 1f;
+            _eventBus.Send(new DefeatEvent());
+            _health = 0;
+            enabled = false;
+            _animator.SetDead();
+            _finallyDead = true;
+            foreach (PlayerWeaponController weapon in _weapons)
+            {
+                weapon.CaptureTarget(null);
+            }
         }
 
         private void Start()
