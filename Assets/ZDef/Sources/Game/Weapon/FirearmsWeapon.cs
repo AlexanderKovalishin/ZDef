@@ -7,32 +7,30 @@ namespace ZDef.Game.Weapon
     public class FirearmsWeapon: MonoBehaviour
     {
         [SerializeField] private FirearmsConfig _weaponConfig;
+        [SerializeField] private Transform _anchor;
+        
         private ProjectileControllerFactory _factory;
-        private Transform _startPosition;
-        private Transform _actualTarget;
+        private IProjectileTarget _actualTarget;
         private float _timer;
-            
+
+        public float AttackRange => _weaponConfig.AttackRange;
+        
         private void Awake()
         {
             _factory = GetComponent<ProjectileControllerFactory>();
             enabled = false;
         }
 
-        public void СaptureTarget(Transform startPosition, Transform target)
+        public void CaptureTarget(IProjectileTarget target)
         {
-            _startPosition = startPosition;
+            if (_actualTarget == target) return;
             _actualTarget = target;
             enabled = target != null;
         }
 
-        public void ResetTarget()
-        {
-            СaptureTarget(null, null);
-        }
-
         private void DoTheShot()
         {
-            _factory.Instantiate(new ProjectileInitArgs(_startPosition, _actualTarget, _weaponConfig.ProjectileVelocity));
+            _factory.Instantiate(new ProjectileInitArgs(_anchor, _actualTarget, _weaponConfig.Damage, _weaponConfig.ProjectileVelocity));
         }
 
         private void Update()

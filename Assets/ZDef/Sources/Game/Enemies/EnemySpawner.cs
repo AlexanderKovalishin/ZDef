@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using ZDef.Core;
+using ZDef.Core.EventBus;
+using ZDef.Game.BusEvents;
 using ZDef.Game.Data;
 
 namespace ZDef.Game.Enemies
@@ -13,8 +16,11 @@ namespace ZDef.Game.Enemies
         public int ProbabilityWeight => _enemyConfig.ProbabilityWeight;
         
         private EnemyControllerFactory _enemyControllerFactory;
+        private EventBus _eventBus;
+        
         private void Awake()
         {
+            _eventBus = ServiceLocator.Locate<EventBus>();
             _enemyControllerFactory = GetComponent<EnemyControllerFactory>();
         }
 
@@ -27,9 +33,19 @@ namespace ZDef.Game.Enemies
             var initArgs = new EnemyControllerInitArgs(
                 spawnPosition,
                 _enemyConfig.Health,
+                _enemyConfig.Damage,
                 _enemyConfig.GetRandomVelocity(),
                 deadLine);
-            _enemyControllerFactory.Instantiate(initArgs);
+            
+            EnemyController instance = _enemyControllerFactory.Instantiate(initArgs);
+            instance.ReturnToPool += EnemyOnReturnToPool;
+            _eventBus.Send(new InstantiateEnemyEvent(instance, initArgs));
+        }
+
+        private void EnemyOnReturnToPool(EnemyController sender)
+        {
+            sender.ReturnToPool -= EnemyOnReturnToPool;
+            _eventBus.Send(new ReturnEnemyEvent(sender));
         }
     }
 }

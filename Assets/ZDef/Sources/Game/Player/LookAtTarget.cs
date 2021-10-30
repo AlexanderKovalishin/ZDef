@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace ZDef.Game.Player
@@ -14,7 +13,7 @@ namespace ZDef.Game.Player
             enabled = false;
         }
 
-        public void СaptureTarget(Transform target)
+        public void CaptureTarget(Transform target)
         {
             _target = target;
             enabled = _target != null;
@@ -22,7 +21,7 @@ namespace ZDef.Game.Player
 
         public void ResetTarget()
         {
-            СaptureTarget(null);
+            CaptureTarget(null);
         }
         
         void Update()
@@ -31,7 +30,7 @@ namespace ZDef.Game.Player
             Vector2 thisPosition = _transform.position;
             Vector3 direction = (targetPosition - thisPosition).normalized;
             float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            _transform.rotation = Quaternion.Euler(0, 0, rotation);
+            _transform.rotation = Quaternion.Euler(0, 0, rotation - 90f);
         }
     }
 }

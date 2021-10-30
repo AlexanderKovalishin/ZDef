@@ -4,5 +4,6 @@ namespace ZDef.Game.Enemies
 {
     public class EnemyControllerFactory : PrefabsPoolFactory<EnemyControllerInitArgs, EnemyController>
     {
+        
     }
 }

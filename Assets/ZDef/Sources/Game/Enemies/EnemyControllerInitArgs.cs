@@ -8,12 +8,14 @@ namespace ZDef.Game.Enemies
         public int Health { get; }
         public float Velocity { get; }
         public float DeadLine { get; }
+        public int Damage { get; }
 
-        public EnemyControllerInitArgs(Vector3 startPosition, int health, float velocity, float deadLine)
+        public EnemyControllerInitArgs(Vector3 startPosition, int health, int damage, float velocity, float deadLine)
         {
             StartPosition = startPosition;
             Velocity = velocity;
             DeadLine = deadLine;
+            Damage = damage;
             Health = health;
         }
 

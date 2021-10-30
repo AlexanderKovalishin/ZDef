@@ -1,39 +1,47 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using ZDef.Game.Data;
+using ZDef.Core;
+using ZDef.Core.EventBus;
+using ZDef.Game.BusEvents;
 using Random = UnityEngine.Random;
 
 namespace ZDef.Game.Enemies
 {
     public class EnemiesSpawnSystem: MonoBehaviour
     {
-        [SerializeField] private GameConfig _gameConfig;
         [SerializeField] private EnemySpawner[] _spawners;
         [SerializeField] private Transform _deadLine;
 
+        private EventBus _eventBus;
         private int _totalProbabilityWeight;
         
         private void Awake()
         {
+            _eventBus = ServiceLocator.Locate<EventBus>();
+            _eventBus.Subscribe<StartSpawnEnemies>(StartSpawnEnemiesListener);
             foreach (EnemySpawner spawner in _spawners)
             {
                 _totalProbabilityWeight += spawner.ProbabilityWeight;
             }
         }
 
-        private void Start()
+        private void OnDestroy()
         {
-            StartCoroutine(SpawnLoop());
+            _eventBus.UnSubscribe<StartSpawnEnemies>(StartSpawnEnemiesListener);
         }
 
-        public IEnumerator SpawnLoop()
+        private void StartSpawnEnemiesListener(StartSpawnEnemies args)
         {
-            int count = _gameConfig.GetRandomEnemiesCount(); 
+            StartCoroutine(SpawnLoop(args.EnemiesCount, args.MinSpawnTimeout, args.MaxSpawnTimeout));
+        }
+
+        
+        private IEnumerator SpawnLoop(int count, float minSpawnTimeout, float maxSpawnTimeout)
+        {
             for (var i = 0; i < count; i++)
             {
-                yield return new WaitForSeconds(_gameConfig.GetRandomSpawnTimeout());
-                // todo: choose spawner
+                yield return new WaitForSeconds(Random.Range(minSpawnTimeout, maxSpawnTimeout));
                 EnemySpawner spawner = GetRandomSpawner();
                 spawner.SpawnEnemy(_deadLine.position.y);
             }

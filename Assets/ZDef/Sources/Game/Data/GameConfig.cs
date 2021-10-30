@@ -13,7 +13,8 @@ namespace ZDef.Game.Data
         [SerializeField] private float _maxSpawnTimeout;
 
         public int GetRandomEnemiesCount() => Random.Range(_minEnemies, _maxEnemies);
-        public float GetRandomSpawnTimeout() => Random.Range(_minSpawnTimeout, _maxSpawnTimeout);
+        public float MinSpawnTimeout => _minSpawnTimeout;
+        public float MaxSpawnTimeout => _maxSpawnTimeout;
 
     }
 }

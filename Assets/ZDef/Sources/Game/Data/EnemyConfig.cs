@@ -7,13 +7,13 @@ namespace ZDef.Game.Data
     {
         [SerializeField] private int _probabilityWeight = 10;
         [SerializeField] private int _health = 100;
+        [SerializeField] private int _damage = 1;
         [SerializeField] private float _minVelocity = 1;
         [SerializeField] private float _maxVelocity = 1;
-        [SerializeField] private string _skin = string.Empty;
 
         public int Health => _health;
         public int ProbabilityWeight => _probabilityWeight;
-        public string Skin => _skin;
+        public int Damage => _damage;
         public float GetRandomVelocity() => Random.Range(_minVelocity, _maxVelocity);
     }
 }

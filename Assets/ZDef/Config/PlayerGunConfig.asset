@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: PlayerGunConfig
   m_EditorClassIdentifier: 
   _projectileVelocity: 20
+  _damage: 25
   _shotsPerSecond: 10
+  _attackRange: 7
