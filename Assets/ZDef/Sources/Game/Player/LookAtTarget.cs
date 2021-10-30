@@ -4,6 +4,8 @@ namespace ZDef.Game.Player
 {
     public class LookAtTarget : MonoBehaviour
     {
+        [SerializeField] private SmoothRotation _smoothRotation;
+        private float _defaultRotation;
         private Transform _target;
         private Transform _transform;
 
@@ -11,17 +13,17 @@ namespace ZDef.Game.Player
         {
             _transform = transform;
             enabled = false;
+            _defaultRotation = _transform.rotation.eulerAngles.z;
         }
 
         public void CaptureTarget(Transform target)
         {
             _target = target;
             enabled = _target != null;
-        }
-
-        public void ResetTarget()
-        {
-            CaptureTarget(null);
+            if (!enabled)
+            {
+                _smoothRotation.SetRotation(Quaternion.Euler(0, 0, _defaultRotation));
+            }
         }
         
         void Update()
@@ -30,7 +32,7 @@ namespace ZDef.Game.Player
             Vector2 thisPosition = _transform.position;
             Vector3 direction = (targetPosition - thisPosition).normalized;
             float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            _transform.rotation = Quaternion.Euler(0, 0, rotation - 90f);
+            _smoothRotation.SetRotation(Quaternion.Euler(0, 0, rotation - 90f));
         }
     }
 }

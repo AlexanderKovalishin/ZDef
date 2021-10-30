@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using ZDef.Core;
 using ZDef.Core.EventBus;
@@ -9,9 +7,6 @@ using ZDef.Game.Enemies;
 
 namespace ZDef.Game.Player
 {
-    // todo: use sensor for enemies registry
-    // todo: use raycast, for enemy choose
-
     public class EnemiesFilter : MonoBehaviour
     {
         private EventBus _eventBus;
@@ -20,7 +15,7 @@ namespace ZDef.Game.Player
         {
             _eventBus = ServiceLocator.Locate<EventBus>();
             _eventBus.Subscribe<InstantiateEnemyEvent>(InstantiateEnemyEventListener);
-            _eventBus.Subscribe<ReturnEnemyEvent>(ReturnEnemyEventListener);
+            _eventBus.Subscribe<EnemyDeadEvent>(EnemyDeadEventEventListener);
         }
 
         public EnemyController FindEnemy(Vector3 position, float radius)
@@ -38,7 +33,7 @@ namespace ZDef.Game.Player
             return result;
         }
 
-        public void FindEnemies(Vector3 position, int count, HashSet<EnemyController> result)
+        public void FindEnemies(Vector3 position, int count, float radius, HashSet<EnemyController> result)
         {
             result.Clear();
             for (var i = 0; i < count; i++)
@@ -49,6 +44,7 @@ namespace ZDef.Game.Player
                 {
                     if (result.Contains(enemy)) continue;
                     float d = Vector3.Distance(enemy.Position, position);
+                    if (d > radius) continue;
                     if (minDistance < d) continue;
                     minDistance = d;
                     minResult = enemy;
@@ -61,7 +57,7 @@ namespace ZDef.Game.Player
         private void OnDestroy()
         {
             _eventBus.UnSubscribe<InstantiateEnemyEvent>(InstantiateEnemyEventListener);
-            _eventBus.UnSubscribe<ReturnEnemyEvent>(ReturnEnemyEventListener);
+            _eventBus.UnSubscribe<EnemyDeadEvent>(EnemyDeadEventEventListener);
         }
 
         private void InstantiateEnemyEventListener(InstantiateEnemyEvent args)
@@ -69,9 +65,9 @@ namespace ZDef.Game.Player
             _enemies.Add(args.EnemyController);
         }
 
-        private void ReturnEnemyEventListener(ReturnEnemyEvent args)
+        private void EnemyDeadEventEventListener(EnemyDeadEvent args)
         {
-            _enemies.Remove(args.EnemyController);
+            _enemies.Remove(args.Instance);
         }
     }
 }

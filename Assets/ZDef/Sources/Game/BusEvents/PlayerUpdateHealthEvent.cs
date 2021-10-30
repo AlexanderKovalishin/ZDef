@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace ZDef.Game.BusEvents
+﻿namespace ZDef.Game.BusEvents
 {
     public readonly struct PlayerUpdateHealthEvent
     {

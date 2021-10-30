@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ZDef.Game.Fx
+namespace ZDef.Game.Fx.Hit
 {
     public readonly struct HitFxInitArgs
     {

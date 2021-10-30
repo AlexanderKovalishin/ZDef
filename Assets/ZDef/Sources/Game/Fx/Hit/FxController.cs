@@ -3,7 +3,7 @@ using ZDef.Core;
 using ZDef.Core.EventBus;
 using ZDef.Game.BusEvents;
 
-namespace ZDef.Game.Fx
+namespace ZDef.Game.Fx.Hit
 {
     public class FxController<TEvent>: MonoBehaviour
         where TEvent: IHitEvent 

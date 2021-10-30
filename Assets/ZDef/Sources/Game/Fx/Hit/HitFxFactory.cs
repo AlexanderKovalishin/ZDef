@@ -1,7 +1,6 @@
-﻿using System;
-using ZDef.Core.PoolFactory;
+﻿using ZDef.Core.PoolFactory;
 
-namespace ZDef.Game.Fx
+namespace ZDef.Game.Fx.Hit
 {
     public class HitFxFactory: PrefabsPoolFactory<HitFxInitArgs, HitFx>
     {

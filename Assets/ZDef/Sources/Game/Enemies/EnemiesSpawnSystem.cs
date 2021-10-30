@@ -47,7 +47,7 @@ namespace ZDef.Game.Enemies
             }
         }
 
-        public EnemySpawner GetRandomSpawner()
+        private EnemySpawner GetRandomSpawner()
         {
             int enemyIndex = Random.Range(0, _totalProbabilityWeight - 1);
             var index = 0;

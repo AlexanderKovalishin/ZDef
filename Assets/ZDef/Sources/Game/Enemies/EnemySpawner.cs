@@ -39,7 +39,7 @@ namespace ZDef.Game.Enemies
             
             EnemyController instance = _enemyControllerFactory.Instantiate(initArgs);
             instance.ReturnToPool += EnemyOnReturnToPool;
-            _eventBus.Send(new InstantiateEnemyEvent(instance, initArgs));
+            _eventBus.Send(new InstantiateEnemyEvent(instance));
         }
 
         private void EnemyOnReturnToPool(EnemyController sender)

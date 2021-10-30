@@ -1,9 +1,6 @@
-﻿using UnityEngine;
-using ZDef.Core;
-using ZDef.Core.EventBus;
-using ZDef.Game.BusEvents;
+﻿using ZDef.Game.BusEvents;
 
-namespace ZDef.Game.Fx
+namespace ZDef.Game.Fx.Hit
 {
     public class HitPlayerFxController: FxController<PlayerHitEvent>
     {

@@ -3,7 +3,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using ZDef.Core.PoolFactory;
 
-namespace ZDef.Game.Fx
+namespace ZDef.Game.Fx.Hit
 {
     public class HitFx : MonoBehaviour, IReturnToPoolCallback<HitFx>, IFactoryInit<HitFxInitArgs>
     {

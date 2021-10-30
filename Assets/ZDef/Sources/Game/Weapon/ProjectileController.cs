@@ -9,8 +9,9 @@ namespace ZDef.Game.Weapon
         private IProjectileTarget _target;
         private Vector2 _startPosition;
         private Vector2 _targetPosition;
-        private Vector3 _direction;
         private float _velocity;
+        private float _time;
+        private float _duration;
         private int _damage;
         private void Awake()
         {
@@ -24,33 +25,30 @@ namespace ZDef.Game.Weapon
             _damage = args.Damage;
             _startPosition = args.StartPosition.position;
             _transform.position = _startPosition;
+            _duration = Vector3.Distance(_startPosition, _target.Transform.position) / _velocity;
+            _time = 0;
         }
 
         private void Update()
         {
-            if (_target is { IsAlive: true })
-            {
-                _targetPosition = _target.Transform.position;
-            }
-            else
-            { 
-                _target = null;
-            }
+            _time += Time.deltaTime;
 
-            Vector2 thisPosition = _transform.position;
-            float distance = Vector2.Distance(_targetPosition, thisPosition);
-            float deltaDistance = _velocity * Time.deltaTime;
-
-            if (deltaDistance < distance)
+            if (_time < _duration)
             {
-                _direction = (_targetPosition - thisPosition) / distance;
-                float rotation = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
-                _transform.position += _direction * deltaDistance;
-                _transform.rotation = Quaternion.Euler(0, 0, rotation);
+                Vector3 targetPosition = _target.Transform.position;
+                Vector3 startPosition = _startPosition;
+                _transform.position = Vector3.Lerp(startPosition, targetPosition, _time / _duration);
+                 Vector3 direction = (targetPosition - startPosition).normalized;
+                 float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                 _transform.rotation = Quaternion.Euler(0, 0, rotation);
             }
             else
             {
-                _target?.Hit(new HitArgs(_damage, _startPosition));
+                if (_target.IsAlive)
+                {
+                    _target?.Hit(new HitArgs(_damage, _startPosition));
+                }
+
                 InvokeReturnToPool();
             }
         }

@@ -16,5 +16,10 @@ namespace ZDef.Game.Player
             _weapon.CaptureTarget(target);
             _lookAtTarget.CaptureTarget(target?.Transform);
         }
+
+        public bool IsFree(Vector3 position)
+        {
+            return _weapon.IsFree(position);
+        }
     }
 }

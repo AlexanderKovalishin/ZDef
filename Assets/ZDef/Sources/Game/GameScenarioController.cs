@@ -13,6 +13,7 @@ namespace ZDef.Game
     {
         [SerializeField] private GameConfig _gameConfig;
         [SerializeField] private float _startTimout = 1f;
+        [SerializeField] private float _finishTimout = 2f;
         [SerializeField] private UILoadingFader _loadingFader;
         [SerializeField] private UIRestartWindow _victoryWindow;
         [SerializeField] private UIRestartWindow _defeatWindow;
@@ -25,7 +26,7 @@ namespace ZDef.Game
             _eventBus = ServiceLocator.Locate<EventBus>();
             _eventBus.Subscribe<VictoryEvent>(VictoryEventListener);
             _eventBus.Subscribe<DefeatEvent>(DefeatEventListener);
-            _eventBus.Subscribe<ReturnEnemyEvent>(ReturnEnemyEvent);
+            _eventBus.Subscribe<EnemyDeadEvent>(EnemyDeadEventListener);
         }
 
         private void OnDestroy()
@@ -37,10 +38,10 @@ namespace ZDef.Game
         {
             _eventBus.UnSubscribe<VictoryEvent>(VictoryEventListener);
             _eventBus.UnSubscribe<DefeatEvent>(DefeatEventListener);
-            _eventBus.UnSubscribe<ReturnEnemyEvent>(ReturnEnemyEvent);
+            _eventBus.UnSubscribe<EnemyDeadEvent>(EnemyDeadEventListener);
         }
         
-        private void ReturnEnemyEvent(ReturnEnemyEvent args)
+        private void EnemyDeadEventListener(EnemyDeadEvent args)
         {
             _enemiesCount--;
             if (_enemiesCount > 0) return;
@@ -62,6 +63,7 @@ namespace ZDef.Game
 
         private IEnumerator ShowFaderAndRestart(UIRestartWindow restartDialog)
         {
+            yield return new WaitForSeconds(_finishTimout);
             yield return restartDialog.ShowAsync();
             yield return _loadingFader.ShowAsync();
             Scene currentScene = SceneManager.GetActiveScene();
