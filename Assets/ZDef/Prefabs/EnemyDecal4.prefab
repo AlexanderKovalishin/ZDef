@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sprite: {fileID: 8480453315486150645}
-  _duration: 10
+  _duration: 20
   _hideDuration: 1
   _showDuration: 0.5
 --- !u!212 &8480453315486150645

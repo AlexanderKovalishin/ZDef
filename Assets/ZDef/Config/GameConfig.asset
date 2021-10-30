@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6c8ffb7a42257948a3de912651dc717, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  _minEnemies: 100
-  _maxEnemies: 150
-  _minSpawnTimeout: 0.2
-  _maxSpawnTimeout: 0.4
+  _minEnemies: 200
+  _maxEnemies: 250
+  _minSpawnTimeout: 0.1
+  _maxSpawnTimeout: 0.2

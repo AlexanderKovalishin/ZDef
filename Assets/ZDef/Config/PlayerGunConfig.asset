@@ -15,4 +15,4 @@ MonoBehaviour:
   _projectileVelocity: 20
   _damage: 50
   _shotsPerSecond: 10
-  _attackRange: 6.5
+  _attackRange: 8

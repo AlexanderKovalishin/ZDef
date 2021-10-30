@@ -37,7 +37,7 @@ namespace ZDef.Game.Player
         private void PlayerHitEventListener(PlayerHitEvent args)
         {
             _health -= args.Damage;
-            if (_health < 0)
+            if (_health <= 0)
             {
                 _eventBus.Send(new DefeatEvent());
                 _health = 0;

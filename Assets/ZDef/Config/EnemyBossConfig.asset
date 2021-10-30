@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _probabilityWeight: 2
   _health: 600
-  _damage: 20
+  _damage: 15
   _minVelocity: 0.75
   _maxVelocity: 1
