@@ -3,6 +3,7 @@ using Photon.Realtime;
 
 namespace ZDef.GameNetwork
 {
+
     public class GameNetworkConnectionRunner
     {
         private readonly RealtimeClient _realtimeClient;

@@ -5,6 +5,8 @@ using UnityEngine;
 
 namespace ZDef.GameNetwork
 {
+
+
     public class ConnectionCallbacks : IConnectionCallbacks
     {
         public event Action ConnectedToMaster;
