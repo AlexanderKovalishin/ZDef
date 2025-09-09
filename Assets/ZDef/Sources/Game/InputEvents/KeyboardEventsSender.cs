@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using ZDef.Core;
 using ZDef.Core.EventBus;
 using ZDef.Game.BusEvents;
@@ -31,7 +32,7 @@ namespace ZDef.Game.InputEvents
                 direction += 1;
                 break;
             }
-            _eventBus.Send(new PlayerMoveEvent(direction));
+            _eventBus.Send(new PlayerMoveEvent(string.Empty, direction));
         }
     }
 }

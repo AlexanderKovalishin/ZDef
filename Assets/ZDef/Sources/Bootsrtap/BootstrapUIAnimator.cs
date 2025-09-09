@@ -3,11 +3,15 @@ using UnityEngine;
 
 namespace ZDef.Bootsrtap
 {
-
-    public class BootstrapUIAnimation: MonoBehaviour
+    public class BootstrapUIAnimator
     {
-        [SerializeField] private Animator _animator;
-        
+        private readonly Animator _animator;
+
+        public BootstrapUIAnimator(Animator animator)
+        {
+            _animator = animator;
+        }
+
         private static readonly int Visible = Animator.StringToHash("Visible");
 
         public void SetVisible(bool value)

@@ -2,11 +2,13 @@
 {
     public readonly struct PlayerMoveEvent
     {
-        public PlayerMoveEvent(float direction)
+        public string PlayerId { get; }
+        public float Direction { get; }
+
+        public PlayerMoveEvent(string playerId, float direction)
         {
+            PlayerId = playerId;
             Direction = direction;
         }
-
-        public float Direction { get; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Photon.Realtime;
 using UnityEngine;
@@ -9,14 +10,15 @@ namespace ZDef.GameNetwork
 {
     public class GameNetworkApiClient: ITickable
     {
-        private readonly RealtimeClient _realtimeClient = new ();
+        private readonly RealtimeClient _realtimeClient;
         private readonly ConnectionCallbacks _connectionCallbacks = new();
         private readonly MatchmakingCallbacks _matchmakingCallbacks = new();
         
         private readonly TimeKeeper _dispatchInterval = new(10);
         private readonly TimeKeeper _sendInterval = new(50);
-        public GameNetworkApiClient()
+        public GameNetworkApiClient(RealtimeClient realtimeClient)
         {
+            _realtimeClient = realtimeClient;
             _realtimeClient.AddCallbackTarget(_connectionCallbacks);
             _realtimeClient.AddCallbackTarget(_matchmakingCallbacks);
             _realtimeClient.StateChanged += RealtimeClientOnStateChanged;
@@ -33,9 +35,19 @@ namespace ZDef.GameNetwork
             return await new GameNetworkConnectionRunner(_realtimeClient, _connectionCallbacks).Run(request);
         }
 
-        public async UniTask<GameNetworkResponse<CreateRoomResponseData>> CreateRoom(CreateRoomRequest request)
+        public async UniTask<GameNetworkResponse<RoomResponseData>> CreateRoom(CreateRoomRequest request)
         {
-            return await new GameNetworkCrateRoomRunner(_realtimeClient, _matchmakingCallbacks).Run(request);
+            return await new GameNetworkCreateRoomRunner(_realtimeClient, _matchmakingCallbacks).Run(request);
+        }
+
+        public async UniTask<GameNetworkResponse<RoomResponseData>> JoinRoom(JoinRoomRequest request)
+        {
+            return await new GameNetworkJoinRoomRunner(_realtimeClient, _matchmakingCallbacks).Run(request);
+        }
+        
+        public async UniTask<GameNetworkResponse<ExitRoomResponseData>> ExitRoom(ExitRoomRequest request)
+        {
+            return await new GameNetworkExitRoomRunner(_realtimeClient, _matchmakingCallbacks).Run(request);
         }
 
         public void Tick()
@@ -54,6 +66,20 @@ namespace ZDef.GameNetwork
                 _realtimeClient.SendOutgoingCommands();
                 _sendInterval.Reset();
             }
+        }
+
+        public int[] RemotePlayerActorNumbers()
+        {
+            if (_realtimeClient.CurrentRoom == null)
+                return Array.Empty<int>();
+            return _realtimeClient.CurrentRoom.Players
+                .Where(x => !x.Value.IsLocal)
+                .Select(x => x.Value.ActorNumber).ToArray();
+        }
+
+        public int CurrentPlayerActorNumber()
+        {
+            return _realtimeClient.CurrentRoom.Players.FirstOrDefault(x => x.Value.IsLocal).Value.ActorNumber;
         }
     }
 

@@ -3,11 +3,14 @@ using ZDef.Core;
 using ZDef.Core.EventBus;
 using ZDef.Game.BusEvents;
 using ZDef.Game.Data;
+using ZDef.GameNetwork;
+using Zenject;
 
 namespace ZDef.Game.Player
 {
     public class PlayerMove : MonoBehaviour
     {
+        [SerializeField] private int _index;
         [SerializeField] private PlayerAnimator _animator;
         [SerializeField] private AnimatorSpeedByVelocity _speedByVelocity;
         [SerializeField] private Transform _min;
@@ -16,11 +19,22 @@ namespace ZDef.Game.Player
         [SerializeField] private Transform _playerMove;
         [SerializeField] private float _velocityK = 20f;
         
+        [Inject] private GameNetworkApiClient _networkClient;
+
+        private string _playerId;
         private EventBus _eventBus;
         private float _moveDirection;
         private float _currentVelocity;
         private void Awake()
         {
+            var actors = _networkClient.RemotePlayerActorNumbers();
+            if (_index < actors.Length)
+            {
+                _playerId = actors[_index].ToString();
+            }
+            
+            Debug.Log($"Awake PlayerMove {_playerId}");
+
             _eventBus = ServiceLocator.Locate<EventBus>();
             _eventBus.Subscribe<PlayerMoveEvent>(PlayerMoveEventListener);
             _eventBus.Subscribe<DefeatEvent>(DefeatEvent);
@@ -46,6 +60,7 @@ namespace ZDef.Game.Player
         
         private void PlayerMoveEventListener(PlayerMoveEvent args)
         {
+            if (_playerId != args.PlayerId) return;
             _moveDirection = args.Direction;
         }
 

@@ -6,7 +6,7 @@ namespace ZDef.Bootsrtap
 {
     internal static class PasswordGenerator
     {
-        private const int PasswordByteLength = 3;
+        private const int PasswordByteLength = 2;
 
         public static string Generate()
         {
@@ -27,8 +27,7 @@ namespace ZDef.Bootsrtap
             var stringBuilder = new StringBuilder();
             foreach (var b in bytes)
             {
-                stringBuilder.Append(GetHexValue(b / 16));
-                stringBuilder.Append(GetHexValue(b % 16));
+                stringBuilder.Append(GetHexValue(b));
             }
             return stringBuilder.ToString();
         }

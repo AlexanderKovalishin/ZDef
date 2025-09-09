@@ -1,14 +1,19 @@
 ﻿using Photon.Realtime;
+using ZDef.Bootsrtap;
 
 namespace ZDef.GameNetwork
 {
-    public class CreateRoomResponseData
+
+    public class RoomResponseData
     {
+        public GameMode Mode { get; }
         public Room Room { get; }
 
-        public CreateRoomResponseData(Room room)
+        public RoomResponseData(Room room, GameMode mode)
         {
             Room = room;
+            Mode = mode;
         }
     }
+
 }

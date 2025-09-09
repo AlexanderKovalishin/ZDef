@@ -3,9 +3,13 @@
     public class CreateRoomRequest
     {
         public string RoomName { get; }
-        public CreateRoomRequest(string roomName)
+        public int PlayersCount { get; }
+
+        public CreateRoomRequest(string roomName, int playersCount)
         {
             RoomName = roomName;
+            PlayersCount = playersCount;
         }
     }
+
 }

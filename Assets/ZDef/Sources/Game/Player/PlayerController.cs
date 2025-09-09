@@ -7,6 +7,8 @@ using ZDef.Core.EventBus;
 using ZDef.Game.BusEvents;
 using ZDef.Game.Data;
 using ZDef.Game.Enemies;
+using ZDef.GameNetwork;
+using Zenject;
 
 namespace ZDef.Game.Player
 {

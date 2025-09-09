@@ -5,40 +5,41 @@ using UnityEngine.UI;
 
 namespace ZDef.Bootsrtap
 {
+    [RequireComponent(typeof(Animator))]
     public class BootstrapUIMenu: MonoBehaviour
     {
-        [SerializeField] private BootstrapUIAnimation _animator;
         [SerializeField] private Button _creatRoomButton;
         [SerializeField] private Button _enterRoomButton;
 
-        public event Action CreatRoomClick;
-        public event Action EnterRoomClick;
-        
+        private BootstrapUIAnimator _animator;
+        private UniTaskCompletionSource<StartMenuAction> _completion;
+
         private void Awake()
         {
+            _animator = new BootstrapUIAnimator(GetComponent<Animator>());
             _creatRoomButton.onClick.AddListener(CreatRoomButtonOnClick);
             _enterRoomButton.onClick.AddListener(JoinRoomButtonOnClick);
         }
 
         private void CreatRoomButtonOnClick()
         {
-            CreatRoomClick?.Invoke();
+            _completion.TrySetResult(StartMenuAction.CreateRoom);
         }
         
         private void JoinRoomButtonOnClick()
         {
-            EnterRoomClick?.Invoke();
+            _completion.TrySetResult(StartMenuAction.EnterRoom);
         }
 
-        public async UniTask Show()
+        public async UniTask<StartMenuAction> ShowPopup()
         {
             await _animator.Show();
-        }
-        
-        public async UniTask Hide()
-        {
+            _completion = new UniTaskCompletionSource<StartMenuAction>();
+            var result = await _completion.Task;
             await _animator.Hide();
+            return result;
         }
+
     }
 
 }

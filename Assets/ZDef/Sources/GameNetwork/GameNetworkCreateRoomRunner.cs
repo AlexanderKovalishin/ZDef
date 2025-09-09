@@ -1,31 +1,39 @@
 using Cysharp.Threading.Tasks;
 using Photon.Realtime;
+using ZDef.Bootsrtap;
 
 namespace ZDef.GameNetwork
 {
-    public class GameNetworkCrateRoomRunner
+    public class GameNetworkCreateRoomRunner
     {
         private readonly RealtimeClient _realtimeClient;
         private readonly MatchmakingCallbacks _matchmakingCallbacks;
-        private readonly UniTaskCompletionSource<GameNetworkResponse<CreateRoomResponseData>> _completion = new();
+        private readonly UniTaskCompletionSource<GameNetworkResponse<RoomResponseData>> _completion = new();
         
-        public GameNetworkCrateRoomRunner(RealtimeClient realtimeClient, MatchmakingCallbacks matchmakingCallbacks)
+        public GameNetworkCreateRoomRunner(RealtimeClient realtimeClient, MatchmakingCallbacks matchmakingCallbacks)
         {
             _realtimeClient = realtimeClient;
             _matchmakingCallbacks = matchmakingCallbacks;
         }
         
-        public async UniTask<GameNetworkResponse<CreateRoomResponseData>> Run(CreateRoomRequest request)
+        public async UniTask<GameNetworkResponse<RoomResponseData>> Run(CreateRoomRequest request)
         {
-            if (_realtimeClient.CurrentRoom != null) return new GameNetworkResponse<CreateRoomResponseData>(new CreateRoomResponseData(_realtimeClient.CurrentRoom));
+            if (_realtimeClient.CurrentRoom != null) return new GameNetworkResponse<RoomResponseData>(new RoomResponseData(_realtimeClient.CurrentRoom, GameMode.Host));
             _matchmakingCallbacks.CreatedRoom += MatchmakingCallbacksOnCreatedRoom;
             _matchmakingCallbacks.CreateRoomFailed += MatchmakingCallbacksOnCreateRoomFailed;
-            var couldCreateRoom = _realtimeClient.OpCreateRoom(new EnterRoomArgs {RoomName = request.RoomName});
+            var couldCreateRoom = _realtimeClient.OpCreateRoom(new EnterRoomArgs
+            {
+                RoomName = request.RoomName,
+                RoomOptions = new RoomOptions
+                {
+                    MaxPlayers = request.PlayersCount
+                }
+            });
             if (!couldCreateRoom)
             {
                 _matchmakingCallbacks.CreatedRoom -= MatchmakingCallbacksOnCreatedRoom;
                 _matchmakingCallbacks.CreateRoomFailed -= MatchmakingCallbacksOnCreateRoomFailed;
-                return new GameNetworkResponse<CreateRoomResponseData>("Failed to create room");
+                return new GameNetworkResponse<RoomResponseData>("Failed to create room");
             }
             var result = await _completion.Task;
             _matchmakingCallbacks.CreatedRoom -= MatchmakingCallbacksOnCreatedRoom;
@@ -35,14 +43,14 @@ namespace ZDef.GameNetwork
 
         private void MatchmakingCallbacksOnCreateRoomFailed(short code, string error)
         {
-            _completion.TrySetResult(new GameNetworkResponse<CreateRoomResponseData>(error));
+            _completion.TrySetResult(new GameNetworkResponse<RoomResponseData>(error));
         }
 
         private void MatchmakingCallbacksOnCreatedRoom()
         {
             _completion.TrySetResult(
-                new GameNetworkResponse<CreateRoomResponseData>(
-                    new CreateRoomResponseData(_realtimeClient.CurrentRoom)));
+                new GameNetworkResponse<RoomResponseData>(
+                    new RoomResponseData(_realtimeClient.CurrentRoom, GameMode.Host)));
         }
     }
 }

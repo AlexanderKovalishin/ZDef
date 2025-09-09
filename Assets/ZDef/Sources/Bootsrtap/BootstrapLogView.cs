@@ -14,6 +14,7 @@ namespace ZDef.Bootsrtap
         
         private readonly Queue<string> _logStrings = new();
         private readonly StringBuilder _stringBuilder = new();
+        private readonly Stack<string> _stringsStack = new();
         
         private LogListener _logListener;
         private object _logLoc = new();
@@ -55,9 +56,14 @@ namespace ZDef.Bootsrtap
 
                 foreach (var logString in _logStrings)
                 {
-                    _stringBuilder.AppendLine(logString);
+                    _stringsStack.Push(logString);
                 }
 
+                while (_stringsStack.Count > 0)
+                {
+                    _stringBuilder.AppendLine(_stringsStack.Pop());
+                }
+                
                 _logText.SetText(_stringBuilder.ToString());
                 _stringBuilder.Clear();
             }

@@ -6,6 +6,7 @@ namespace ZDef.Game.Weapon
     public class ProjectileController : MonoBehaviour, IFactoryInit<ProjectileInitArgs>, IReturnToPoolCallback<ProjectileController>
     {
         private Transform _transform;
+        private ParticleSystem _particle;
         private IProjectileTarget _target;
         private Vector2 _startPosition;
         private Vector2 _targetPosition;
@@ -16,6 +17,7 @@ namespace ZDef.Game.Weapon
         private void Awake()
         {
             _transform = transform;
+            _particle = GetComponentInChildren<ParticleSystem>();
         }
 
         public void Init(ProjectileInitArgs args)
@@ -27,6 +29,7 @@ namespace ZDef.Game.Weapon
             _transform.position = _startPosition;
             _duration = Vector3.Distance(_startPosition, _target.Transform.position) / _velocity;
             _time = 0;
+            _particle.Play(true);
         }
 
         private void Update()
@@ -38,9 +41,9 @@ namespace ZDef.Game.Weapon
                 Vector3 targetPosition = _target.Transform.position;
                 Vector3 startPosition = _startPosition;
                 _transform.position = Vector3.Lerp(startPosition, targetPosition, _time / _duration);
-                 Vector3 direction = (targetPosition - startPosition).normalized;
-                 float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                 _transform.rotation = Quaternion.Euler(0, 0, rotation);
+                Vector3 direction = (targetPosition - startPosition).normalized;
+                float rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                _transform.rotation = Quaternion.Euler(0, 0, rotation);
             }
             else
             {
@@ -55,6 +58,7 @@ namespace ZDef.Game.Weapon
 
         private void InvokeReturnToPool()
         {
+            _particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             ReturnToPool?.Invoke(this);
         }
 

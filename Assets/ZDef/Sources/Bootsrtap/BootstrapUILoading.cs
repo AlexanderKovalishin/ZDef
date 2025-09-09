@@ -3,9 +3,15 @@ using UnityEngine;
 
 namespace ZDef.Bootsrtap
 {
+    [RequireComponent(typeof(Animator))]
     public class BootstrapUILoading : MonoBehaviour
     {
-        [SerializeField] private BootstrapUIAnimation _animator;
+        private BootstrapUIAnimator _animator;
+
+        private void Awake()
+        {
+            _animator = new BootstrapUIAnimator(GetComponent<Animator>());
+        }
 
         public async UniTask Show()
         {
